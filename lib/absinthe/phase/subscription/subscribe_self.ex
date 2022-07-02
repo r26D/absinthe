@@ -21,6 +21,8 @@ defmodule Absinthe.Phase.Subscription.SubscribeSelf do
 
     %{selections: [field]} = op
 
+    run_extra_subscription(op, blueprint, options)
+
     with {:ok, config} <- get_config(field, context, blueprint) do
       field_keys = get_field_keys(field, config)
       subscription_id = get_subscription_id(config, blueprint, options)
@@ -163,4 +165,13 @@ defmodule Absinthe.Phase.Subscription.SubscribeSelf do
         val
     end
   end
+  defp run_extra_subscription(op, blueprint, options) when is_list(options) do
+    case Keyword.get(options, :extra_subscription_fn) do
+      nil -> nil
+      extra_subscription_fn -> IO.inspect(extra_subscription_fn, label: "Extra Fn")
+                               extra_subscription_fn.(op, blueprint, options)
+    end
+
+  end
+  defp run_extra_subscription(_, _, _), do: nil
 end
