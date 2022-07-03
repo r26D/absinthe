@@ -169,8 +169,7 @@ defmodule Absinthe.Phase.Subscription.SubscribeSelf do
   defp run_extra_subscription(original_subscription_id, op, blueprint, options) when is_list(options) do
     case Keyword.get(options, :extra_subscription_fn) do
       nil -> nil
-      extra_subscription_fn -> IO.inspect(extra_subscription_fn, label: "Extra Fn")
-                               extra_subscription_fn.(original_subscription_id,op, blueprint, options)
+      extra_subscription_fn -> extra_subscription_fn.(original_subscription_id,op, blueprint, options)
     end
 
   end
